@@ -1,0 +1,141 @@
+---
+import Logo from '~/components/logo/index.astro'
+import Link from '~/components/link.astro'
+import Modal from '~/components/modal/index.astro';
+---
+<Modal/>
+<div class="footer" itemscope itemtype="https://schema.org/WPFooter">
+    <div class="container xxl">
+        <div class="grid">
+            <div class="column">
+                <Logo class="logo"/>
+            </div>
+            <div class="column">
+                <ul class="list">
+                    <li class="item">
+                        <a href={'/privacy-policy'} class="link">
+                            Privacy Policy
+                        </a>
+                    </li>
+                    <li class="item">
+                        <a href={'/terms-and-conditions'} class="link">
+                            Terms and conditions
+                        </a>
+                    </li>
+                    <li class="item">
+                        <a href={'/rss.xml'} class="link">
+                            RSS
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style lang="scss">
+  @use "sass:list";
+  @use "sass:meta";
+  @use "sass:string";
+
+  @use "../../styles/app.scss" as app;
+  @use "../../styles/scss/mixins.scss" as mixins;
+
+  $footer-component: (
+    background: var(--background),
+    /*border-top: var(--border),*/
+    padding-block: 35px,
+    padding-inline: var(--padding-inline),
+    box-shadow: string.unquote('0 0 24px rgba(34, 42, 53, 0.06), 0 1px 1px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(34, 42, 53, 0.04), 0 0 4px rgba(34, 42, 53, 0.08), 0 16px 68px rgba(47, 48, 55, 0.05), 0 1px 0 rgba(255, 255, 255, 0.1) inset'),
+    _colors: (
+      light : (
+        background: rgb(241, 241, 249),
+        border : 1px solid rgb(211, 216, 223),
+      ),
+      dark: (
+        background : string.unquote('linear-gradient(oklab(0.551 -0.002652 -0.026869 / 0.2) 0px, rgba(0, 0, 0, 0) 125%)'),
+        border : 1px solid rgb(40, 79, 49),
+      )
+    ),
+    _subclasses: (
+      '.grid' : (
+        --columns: "",
+        display: grid,
+        grid-template-columns: auto,
+        gap: 15px,
+        _responsive: (
+          lg: (
+            grid-template-columns: auto auto,
+          ),
+        ),
+        _subclasses: (
+          '.column' : (
+            align-items: center,
+            _subclasses : (
+              '.logo' : (
+                width: 100px,
+                height: 21px,
+              ),
+              '.list' : (
+                list-style-type: none,
+                display: inline-flex,
+                flex-direction: column,
+                gap: 15px,
+                _subclasses : (
+                  '.link' : (
+                    text-decoration: none,
+                    _subclasses : (
+                      '&:hover' : (
+                        text-decoration: underline,
+                        text-underline-offset: 3px,
+                        text-decoration-thickness: 1px,
+                      )
+                    )
+                  )
+                ),
+                _responsive : (
+                  md : (
+                    flex-direction: row,
+                    gap: 9px,
+                  ),
+                ),
+              )
+            )
+          ),
+          '.column:last-child' : (
+            text-align: left,
+            _responsive : (
+              md: (
+                text-align: right,
+              )
+            )
+          )
+        )
+      ),
+    ),
+  );
+
+  @include mixins.generate-component(
+    $footer-component,
+    'footer',
+    app.$config,
+    app.$theme
+  );
+</style>
+
+<script>
+    document.addEventListener('readystatechange', function () {
+        if (document.readyState === 'complete') {
+            // All resources loaded
+            setTimeout(function () {
+                document.querySelector('body').classList.remove('preload');
+            }, 50)
+        }
+    })
+</script>
+
+<style is:global>
+    .preload * {
+        transition: none !important;
+    }
+</style>

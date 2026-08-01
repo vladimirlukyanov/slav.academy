@@ -1,0 +1,164 @@
+---
+import {Image} from 'astro:assets'
+
+import LayoutBlog from '~/layouts/blog.astro'
+import Sidebar from '~/components/single/sidebar/index.astro'
+import AuthorProfile from '~/components/author/profile/index.astro'
+import RelatedPosts from '~/components/related/index.astro'
+import Breadcrumbs from '~/components/breadcrumbs/index.astro'
+import Link from '~/components/link.astro'
+
+import {getEntries, getCollection} from 'astro:content'
+import {render} from 'astro:content'
+
+import {format_date} from '../lib/utils'
+
+export async function getStaticPaths() {
+    const posts = await getCollection('blog')
+
+    return posts.map((post) => {
+        const [year, slug] = post.id.split('/')
+        return {
+            params: {
+                slug: slug.toString(),
+            },
+            props: post,
+        }
+    })
+}
+
+const post = Astro.props
+const {Content} = await render(post)
+
+const posts = await getCollection('blog');
+const authors = post.data.authors ? await getEntries(post.data.authors) : null
+const categories = post.data.categories
+    ? await getEntries(post.data.categories)
+    : null
+const tags = post.data.tags ? await getEntries(post.data.tags) : null
+const related_posts = post.data.related_posts ? await getEntries(
+    post.data.related_posts) : null
+
+const sidebar_posts = posts.filter((_post) => {
+    return _post.id !== post.id
+}).filter((_post) => {
+    if (post.data?.related_posts && post.data?.related_posts.length > 0) {
+        return !post.data?.related_posts.some(related_post => _post?.id.includes(related_post?.id));
+    }
+    return false;
+}).sort(
+    (a, b) => b.data.published_date.valueOf() - a.data.published_date.valueOf(),
+).slice(0, 10);
+---
+
+<LayoutBlog title={post.data.title} description={post.data.description}
+            featured_image={post.data?.image?.url}>
+    <div class="single_post">
+        <div class="container xxl">
+            <div class="grid">
+                <div class="post">
+                    <article class="content" itemscope
+                             itemtype="https://schema.org/Article">
+                        {false &&
+                                <div class="category">
+                                    {post.data.categories.map((category) => {
+                                        return (
+                                                <a href={'/category/' + category.id}
+                                                   class="link">{category.id}</a>
+                                        )
+                                    })}
+                                </div>
+                        }
+                        <h1 class="title"
+                            itemprop="headline">{post.data.title}</h1>
+
+                        <p class="description">{post.data.description}</p>
+                        <Content components={{a: Link}}/>
+                    </article>
+
+                    {related_posts &&
+                            <RelatedPosts posts={related_posts} title={'You might also enjoy:'}/>
+                    }
+                </div>
+
+            </div>
+        </div>
+    </div>
+</LayoutBlog>
+
+<style lang="scss">
+  @use "sass:list";
+  @use "sass:string";
+  @use "sass:meta";
+  @use "sass:map";
+
+  @use "~/styles/app.scss" as app;
+
+  @use "~/styles/scss/mixins.scss" as mixins;
+  @use "~/styles/scss/functions.scss" as functions;
+
+  $single_post: (
+    margin: 25px 0,
+    /***/
+    _subclasses: (
+      '.grid' : (
+        display: grid,
+        width: 100%,
+        grid-template-columns: 1fr,
+        grid-auto-rows: auto,
+        grid-gap: 1rem,
+        /***/
+        _responsive: (
+          md: (
+            grid-template-columns: 1.4fr 0.6fr,
+            grid-gap: 2rem,
+          ),
+        ),
+        /***/
+        _subclasses: (
+          '.post' : (
+            /***/
+            _subclasses: (
+              '.category' : (
+                text-transform: capitalize,
+                _subclasses: (
+                  '.link' : (
+                    color: #8c602e,
+                  )
+                )
+              ),
+              '.title': (),
+              '.information': (
+                display: flex,
+                align-items: center,
+                margin: 0 0 10px 0,
+                /***/
+                _subclasses: (
+                  '.tags': (
+                    margin: 0 10px,
+                    display: flex,
+                    gap: 10px,
+                    text-transform: capitalize,
+                  ),
+                ),
+              ),
+              '.description': (
+                /*font-size: 1.25rem,*/
+                /*color: #ccc,*/
+              ),
+            )
+          ),
+          '.sidebar': (
+          )
+        )
+      ),
+    ),
+  );
+
+  @include mixins.generate-component(
+    $single_post,
+    'single_post',
+    app.$config,
+    app.$theme
+  );
+</style>

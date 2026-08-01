@@ -1,0 +1,993 @@
+---
+import FormattedDate from '../../FormattedDate.astro'
+import { Image, Picture } from 'astro:assets'
+import { words_limit } from '~/utils/text'
+
+const { posts } = Astro.props
+
+const posts_column_1 = posts.filter(
+  (post) => post.data?.composition?.news?.column === 1)
+const posts_column_2 = posts.filter(
+  (post) => post.data?.composition?.news?.column === 2)
+const posts_column_3 = posts.filter(
+  (post) => post.data?.composition?.news?.column === 3)
+---
+<section class="hot" itemscope itemtype="https://schema.org/CollectionPage">
+    <div class="container xxl">
+        <div class="grid">
+            <div class="one">
+              {
+                posts_column_1.slice(0, 5).map((post, index) => {
+
+                  switch (post.data?.composition?.news?.block) {
+                    case 'big':
+                      return (
+                              <div class="post big" role="list"
+                                   aria-label="Posts list" itemscope
+                                   itemtype="https://schema.org/ItemList">
+                                  <meta itemprop="headline"
+                                        content={post.data.title}/>
+                                  <meta itemprop="image"
+                                        content={post.data.image.url.src}/>
+                                  <meta itemprop="datePublished"
+                                        content={post.data.published_date}/>
+                                  <a href={`/${post.id.substring(5)}/`}
+                                     class="link" title={post.data.title}>
+                                                <span class="image">
+                                                    <Picture
+                                                            class="img"
+                                                            width={410}
+                                                            breakpoints={[
+                                                              370,
+                                                              410,
+                                                              820]}
+                                                            layout={'full-width'}
+                                                            formats={['webp']}
+                                                            src={post.data.image.url}
+                                                            alt={post.data.image.alt}
+                                                    />
+                                                </span>
+                                      <span class="title">{post.data.short_description ??
+                                        post.data.title}</span>
+                                  </a>
+                              </div>
+                      )
+                    case 'medium':
+                      return (
+                              <div class="post medium" itemscope
+                                   itemtype="https://schema.org/BlogPosting">
+                                  <meta itemprop="headline"
+                                        content={post.data.title}/>
+                                  <meta itemprop="image"
+                                        content={post.data.image.url.src}/>
+                                  <meta itemprop="datePublished"
+                                        content={post.data.published_date}/>
+                                  <a href={`/${post.id.substring(5)}/`}
+                                     class="link" title={post.data.title}>
+                                                <span class="image">
+                                                    <Picture
+                                                            class="img"
+                                                            width={370}
+                                                            breakpoints={[370]}
+                                                            formats={['webp']}
+                                                            src={post.data.image.url}
+                                                            alt={post.data.image.alt}
+                                                    />
+                                                </span>
+                                  </a>
+                                  <a href={`/${post.id.substring(5)}/`}
+                                     class="link" title={post.data.title}>
+                                      <span class="title">{post.data.short_description ??
+                                        post.data.title}</span>
+                                  </a>
+                              </div>
+                      )
+                    case 'small':
+                      return (
+                              <div class="post short" itemscope
+                                   itemtype="https://schema.org/BlogPosting">
+                                  <meta itemprop="headline"
+                                        content={post.data.title}/>
+                                  <meta itemprop="image"
+                                        content={post.data.image.url.src}/>
+                                  <meta itemprop="datePublished"
+                                        content={post.data.published_date}/>
+                                  <a href={`/${post.id.substring(5)}/`}
+                                     class="link" title={post.data.title}>
+                                      <span class="title">{post.data.short_description ??
+                                        post.data.title}</span>
+                                  </a>
+                              </div>
+                      )
+                    default:
+                      return (
+                              <div class="post" itemscope
+                                   itemtype="https://schema.org/BlogPosting">
+                                  <meta itemprop="headline"
+                                        content={post.data.title}/>
+                                  <meta itemprop="image"
+                                        content={post.data.image.url.src}/>
+                                  <meta itemprop="datePublished"
+                                        content={post.data.published_date}/>
+                                  <a href={`/${post.id.substring(5)}/`}
+                                     class="link" title={post.data.title}>
+                                                <span class="image">
+                                                    <Picture
+                                                            class="img"
+                                                            width={370}
+                                                            breakpoints={[370]}
+                                                            formats={['webp']}
+                                                            src={post.data.image.url}
+                                                            alt={post.data.image.alt}
+                                                    />
+                                                </span>
+                                  </a>
+                                  <a href={`/${post.id.substring(5)}/`}
+                                     class="link" title={post.data.title}>
+                                      <span class="title">{post.data.title}</span>
+                                  </a>
+                              </div>
+                      )
+                  }
+                })
+              }
+            </div>
+            <div class="two">
+              {
+                posts_column_2.slice(0, 5).map((post, index) => {
+                  if (index === 0) {
+                    return (
+                            <div class="featured" itemscope
+                                 itemtype="https://schema.org/BlogPosting">
+                                <meta itemprop="headline"
+                                      content={post.data.title}/>
+                                <meta itemprop="image"
+                                      content={post.data.image.url.src}/>
+                                <meta itemprop="datePublished"
+                                      content={post.data.published_date}/>
+                                <a href={`/${post.id.substring(5)}/`}
+                                   class="link"
+                                   title={post.data.title}>
+                                    <span class="title">{post.data.title}</span>
+                                </a>
+                                <a href={`/${post.id.substring(5)}/`}
+                                   class="image-link"
+                                   title={post.data.title}>
+                                            <span class="image">
+                                                <Picture
+                                                        loading={'lazy'}
+                                                        src={post.data.image.url}
+                                                        formats={['webp']}
+                                                        width={960}
+                                                        breakpoints={[
+                                                          370,
+                                                          640,
+                                                          960,
+                                                          1280]}
+                                                        fetchpriority={'high'}
+                                                        alt={post.data.image.alt}
+                                                        class="img"/>
+                                            </span>
+                                    <span class="text">
+                                                <span class="subtitle">{post.data.short_description}</span>
+                                            </span>
+                                </a>
+                            </div>
+                    )
+                  } else {
+                    switch (post.data?.composition?.news?.block) {
+                      case 'big':
+                        return (
+                                <div class="post big" itemscope
+                                     itemtype="https://schema.org/BlogPosting">
+                                    <meta itemprop="headline"
+                                          content={post.data.title}/>
+                                    <meta itemprop="image"
+                                          content={post.data.image.url.src}/>
+                                    <meta itemprop="datePublished"
+                                          content={post.data.published_date}/>
+                                    <a href={`/${post.id.substring(5)}/`}
+                                       class="link" title={post.data.title}>
+                                                    <span class="image">
+                                                        <Picture
+                                                                class="img"
+                                                                width={410}
+                                                                breakpoints={[
+                                                                  370,
+                                                                  410,
+                                                                  820]}
+                                                                layout={'full-width'}
+                                                                formats={['webp']}
+                                                                src={post.data.image.url}
+                                                                alt={post.data.image.alt}
+                                                        />
+                                                    </span>
+                                    </a>
+                                    <a href={`/${post.id.substring(5)}/`}
+                                       class="link" title={post.data.title}>
+                                        <span class="title">{post.data.short_description ??
+                                          post.data.title}</span>
+                                    </a>
+                                </div>
+                        )
+                      case 'medium':
+                        return (
+                                <div class="post medium" itemscope
+                                     itemtype="https://schema.org/BlogPosting">
+                                    <meta itemprop="headline"
+                                          content={post.data.title}/>
+                                    <meta itemprop="image"
+                                          content={post.data.image.url.src}/>
+                                    <meta itemprop="datePublished"
+                                          content={post.data.published_date}/>
+                                    <a href={`/${post.id.substring(5)}/`}
+                                       class="link" title={post.data.title}>
+                                                    <span class="image">
+                                                        <Picture
+                                                                class="img"
+                                                                width={370}
+                                                                formats={['webp']}
+                                                                src={post.data.image.url}
+                                                                alt={post.data.image.alt}
+                                                        />
+                                                    </span>
+                                    </a>
+                                    <a href={`/${post.id.substring(5)}/`}
+                                       class="link" title={post.data.title}>
+                                        <span class="title">{post.data.short_description ??
+                                          post.data.title}</span>
+                                    </a>
+                                </div>
+                        )
+                      case 'small':
+                        return (
+                                <div class="post short" itemscope
+                                     itemtype="https://schema.org/BlogPosting">
+                                    <meta itemprop="headline"
+                                          content={post.data.title}/>
+                                    <meta itemprop="image"
+                                          content={post.data.image.url.src}/>
+                                    <meta itemprop="datePublished"
+                                          content={post.data.published_date}/>
+                                    <a href={`/${post.id.substring(5)}/`}
+                                       class="link" title={post.data.title}>
+                                        <span class="title">{post.data.short_description ??
+                                          post.data.title}</span>
+                                    </a>
+                                </div>
+                        )
+                      default:
+                        return (
+                                <div class="post" itemscope
+                                     itemtype="https://schema.org/BlogPosting">
+                                    <meta itemprop="headline"
+                                          content={post.data.title}/>
+                                    <meta itemprop="image"
+                                          content={post.data.image.url.src}/>
+                                    <meta itemprop="datePublished"
+                                          content={post.data.published_date}/>
+                                    <a href={`/${post.id.substring(5)}/`}
+                                       class="link" title={post.data.title}>
+                                                    <span class="image">
+                                                        <Picture
+                                                                class="img"
+                                                                width={370}
+                                                                formats={['webp']}
+                                                                src={post.data.image.url}
+                                                                alt={post.data.image.alt}
+                                                        />
+                                                    </span>
+                                    </a>
+                                    <a href={`/${post.id.substring(5)}/`}
+                                       class="link" title={post.data.title}>
+                                        <span class="title">{post.data.title}</span>
+                                    </a>
+                                </div>
+                        )
+                    }
+                  }
+                })
+              }
+            </div>
+            <div class="three">
+              {
+                posts_column_3.slice(0, 4).map((post, index) => {
+
+                  switch (post.data?.composition?.news?.block) {
+                    case 'big':
+                      return (
+                              <div class="post big" itemscope
+                                   itemtype="https://schema.org/BlogPosting">
+                                  <meta itemprop="headline"
+                                        content={post.data.title}/>
+                                  <meta itemprop="image"
+                                        content={post.data.image.url.src}/>
+                                  <meta itemprop="datePublished"
+                                        content={post.data.published_date}/>
+                                  <a href={`/${post.id.substring(5)}/`}
+                                     class="link" title={post.data.title}>
+                                                <span class="image">
+                                                    <Picture
+                                                            class="img"
+                                                            width={410}
+                                                            breakpoints={[
+                                                              370,
+                                                              410,
+                                                              820]}
+                                                            layout={'full-width'}
+                                                            formats={['webp']}
+                                                            src={post.data.image.url}
+                                                            alt={post.data.image.alt}
+                                                    />
+                                                </span>
+                                      <span class="title">{post.data.short_description ??
+                                        post.data.title}</span>
+                                  </a>
+                              </div>
+                      )
+                    case 'medium':
+                      return (
+                              <div class="post medium" itemscope
+                                   itemtype="https://schema.org/BlogPosting">
+                                  <meta itemprop="headline"
+                                        content={post.data.title}/>
+                                  <meta itemprop="image"
+                                        content={post.data.image.url.src}/>
+                                  <meta itemprop="datePublished"
+                                        content={post.data.published_date}/>
+                                  <a href={`/${post.id.substring(5)}/`}
+                                     class="link" title={post.data.title}>
+                                                <span class="image">
+                                                    <Picture
+                                                            class="img"
+                                                            width={370}
+                                                            formats={['webp']}
+                                                            src={post.data.image.url}
+                                                            alt={post.data.image.alt}
+                                                    />
+                                                </span>
+                                  </a>
+                                  <a href={`/${post.id.substring(5)}/`}
+                                     class="link" title={post.data.title}>
+                                      <span class="title">{post.data.short_description ??
+                                        post.data.title}</span>
+                                  </a>
+                              </div>
+                      )
+                    case 'small':
+                      return (
+                              <div class="post short" itemscope
+                                   itemtype="https://schema.org/BlogPosting">
+                                  <meta itemprop="headline"
+                                        content={post.data.title}/>
+                                  <meta itemprop="image"
+                                        content={post.data.image.url.src}/>
+                                  <meta itemprop="datePublished"
+                                        content={post.data.published_date}/>
+                                  <a href={`/${post.id.substring(5)}/`}
+                                     class="link" title={post.data.title}>
+                                      <span class="title">{post.data.short_description ??
+                                        post.data.title}</span>
+                                  </a>
+                              </div>
+                      )
+                    default:
+                      return (
+                              <div class="post" itemscope
+                                   itemtype="https://schema.org/BlogPosting">
+                                  <meta itemprop="headline"
+                                        content={post.data.title}/>
+                                  <meta itemprop="image"
+                                        content={post.data.image.url.src}/>
+                                  <meta itemprop="datePublished"
+                                        content={post.data.published_date}/>
+                                  <a href={`/${post.id.substring(5)}/`}
+                                     class="link" title={post.data.title}>
+                                                <span class="image">
+                                                    <Picture
+                                                            class="img"
+                                                            width={370}
+                                                            formats={['webp']}
+                                                            src={post.data.image.url}
+                                                            alt={post.data.image.alt}
+                                                    />
+                                                </span>
+                                  </a>
+                                  <a href={`/${post.id.substring(5)}/`}
+                                     class="link" title={post.data.title}>
+                                      <span class="title">{post.data.title}</span>
+                                  </a>
+                              </div>
+                      )
+                  }
+                })
+              }
+            </div>
+        </div>
+    </div>
+</section>
+
+<style lang="scss">
+  @use "sass:list";
+  @use "sass:string";
+  @use "sass:meta";
+  @use "sass:map";
+
+  @use "~/styles/app.scss" as app;
+
+  @use "~/styles/scss/mixins.scss" as mixins;
+  @use "~/styles/scss/functions.scss" as functions;
+
+  // --- hot section --- //
+
+  $hot-news-section-grid-column-1: (
+    order: 2,
+    grid-column: span 3 / span 3,
+    _subclasses: (
+      '.post' : (
+        display: block,
+        width: 100%,
+        /*grid-template-columns: 1fr,*/
+        /*grid-auto-rows: auto,*/
+        /*grid-gap: 0,*/
+        margin: 0 0 15px 0,
+        padding: 0 0 15px 0,
+        border-bottom: 1px solid rgba(255, 255, 255, 0.15),
+        _subclasses: (
+          /***/
+          '&.big' : (
+            _subclasses: (
+              '.image' : (
+                _subclasses: (
+                  '&:hover .img' : (
+                    _atrule : (
+                      '@media (hover: hover) and (pointer: fine)' : (
+                        transform: var(--image-zoom-large)
+                      )
+                    ),
+                  ),
+                )
+              ),
+              '.image > picture' : (
+                min-height: 160px,
+                display: block,
+              )
+            )
+          ),
+          '&.medium' : (
+            display: grid,
+            grid-template-columns: 140px 1fr,
+            gap: 1rem,
+            _subclasses: (
+              '.title' : (
+                font-size: 1rem,
+                font-weight: 400,
+                line-height: 1.375rem,
+              ),
+              '.image' : (
+                margin: 0 auto,
+                _subclasses: (
+                  '&:hover .img' : (
+                    _atrule : (
+                      '@media (hover: hover) and (pointer: fine)' : (
+                        transform: var(--image-zoom-medium)
+                      )
+                    ),
+                  ),
+                )
+              )
+            ),
+            _responsive: (
+              md : (
+                grid-template-columns: 300px 1fr,
+              ),
+              lg : (
+                grid-template-columns: 140px 1fr,
+              )
+            ),
+          ),
+          '&.short' : (
+            _subclasses: (
+              '.title' : (
+                font-size: 1rem,
+                font-weight: 400,
+                line-height: 1.375rem,
+              )
+            )
+          ),
+          '&:last-child' : (
+            _responsive : (
+              md : (
+                margin: 0,
+                border-bottom: none,
+              )
+            )
+          ),
+          '.image' : (
+            position: relative,
+            display: block,
+            box-shadow: string.unquote('rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.1) 0px 2px 4px -2px'),
+            border-radius: 0.5rem,
+            overflow: hidden,
+            margin: 0 0 15px 0,
+            _subclasses: (
+              '.img' : (
+                transition-property: transform,
+                transition-timing-function: cubic-bezier(.4, 0, .2, 1),
+                transition-duration: .5s,
+                transform: scale(1),
+              ),
+              '&:hover:after' : (
+                background-image: string.unquote('linear-gradient(oklch(0.28 0.05 160.39 / 0.2), rgba(0, 0, 0, 0.46))'),
+              ),
+              '&:after' : (
+                content: '',
+                position: absolute,
+                inset: 0,
+                display: block,
+                z-index: 2,
+              ),
+            ),
+          ),
+          '.title': (
+            font-size: 1.25rem,
+            display: block,
+            font-weight: 400,
+            line-height: 1.5rem,
+            _subclasses : (
+              '&:hover' : (
+                text-decoration: underline,
+                text-underline-offset: 3px,
+                text-decoration-thickness: 1px,
+              ),
+            )
+          ),
+          '.description': (
+            display: block,
+            margin: 0 0 15px 0,
+          ),
+          '.date' : (
+            font-size: 0.825rem,
+            color: #959595,
+          )
+        ),
+      )
+    ),
+    _responsive: (
+      lg: (
+        grid-column: auto,
+      ),
+    ),
+  );
+
+  $hot-news-section-grid-column-2: (
+    order: 1,
+    grid-column: span 3 / span 3,
+    _subclasses: (
+      /***/
+      '.featured' : (
+        margin: 0 0 15px 0,
+        padding: 0 0 15px 0,
+        /***/
+        _subclasses: (
+          /***/
+          '.link' : (
+            display: block,
+            _subclasses: (
+              /***/
+              '&:hover' : (
+                text-decoration: underline,
+                text-underline-offset: 3px,
+              ),
+              '.title' : (
+                font-size: clamp(1.925rem, 4vw, 2.225rem),
+                font-weight: 600,
+                display: block,
+                text-align: center,
+                margin: 0 0 12px 0,
+                line-height: 1.1,
+              ),
+            ),
+          ),
+          '.image-link' : (
+            position: relative,
+            display: block,
+            _subclasses: (
+              '.image' : (
+                position: relative,
+                display: block,
+                box-shadow: string.unquote('rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.1) 0px 2px 4px -2px'),
+                border-radius: 0.5rem,
+                overflow: hidden,
+                _subclasses: (
+                  '.img' : (
+                    transition-property: transform,
+                    transition-timing-function: cubic-bezier(.4, 0, .2, 1),
+                    transition-duration: .5s,
+                    transform: scale(1),
+                  ),
+                  '&:hover .img' : (
+                    _atrule : (
+                      '@media (hover: hover) and (pointer: fine)' : (
+                        transform: var(--image-zoom-featured),
+                      )
+                    ),
+                  ),
+                  '&:hover:after' : (
+                    background-image: string.unquote('linear-gradient(rgba(5, 17, 4, 0.25), rgba(0, 0, 0, 1))'),
+                  ),
+                  '&:after' : (
+                    content: '',
+                    background-image: string.unquote('linear-gradient(-180deg, rgba(0, 0, 0, 0.01) 65%, rgba(0, 0, 0, 0.75) 82%, rgba(0, 0, 0, 0.85) 100%)'),
+                    position: absolute,
+                    inset: 0,
+                    display: block,
+                    z-index: 2,
+                  ),
+                ),
+              ),
+              '.text' : (
+                position: relative,
+                left: 0,
+                bottom: 0,
+                width: 100%,
+                z-index: 3,
+                display: block,
+                padding: 10px 0 0 0,
+                _subclasses: (
+                  '.subtitle' : (
+                    font-size: 1.25rem,
+                    line-height: 1.5rem,
+                    display: block,
+                    width: 100%,
+                    padding-inline: 25px,
+                    padding-bottom: 0,
+                    _responsive : (
+                      xl : (
+                        padding-bottom: 20px,
+                      )
+                    ),
+                    _subclasses: (
+                      '&:hover' : (
+                        text-decoration: underline,
+                        text-underline-offset: 3px,
+                        text-decoration-thickness: 1px,
+                      ),
+                    )
+                  )
+                ),
+                _responsive : (
+                  xl : (
+                    position: absolute,
+                    bottom: 0,
+                    padding: 0,
+                  )
+                )
+              ),
+            )
+          )
+        ),
+      ),
+      '.post' : (
+        display: block,
+        width: 100%,
+        /*grid-template-columns: 1fr,*/
+        /*grid-auto-rows: auto,*/
+        /*grid-gap: 0,*/
+        margin: 0 0 15px 0,
+        padding: 0 0 15px 0,
+        border-bottom: 1px solid rgba(255, 255, 255, 0.15),
+        _subclasses: (
+          /***/
+          '&.big' : (
+            _subclasses: (
+              '.image' : (
+                _subclasses: (
+                  '&:hover .img' : (
+                    _atrule : (
+                      '@media (hover: hover) and (pointer: fine)' : (
+                        transform: var(--image-zoom-large)
+                      )
+                    ),
+                  ),
+                )
+              ),
+              '.image > picture' : (
+                min-height: 160px,
+                display: block,
+              )
+            )
+          ),
+          '&.medium' : (
+            display: grid,
+            grid-template-columns: 140px 1fr,
+            gap: 1rem,
+            _subclasses: (
+              '.title' : (
+                font-size: 1rem,
+                font-weight: 400,
+                line-height: 1.375rem,
+              ),
+              '.image' : (
+                margin: 0 auto,
+                _subclasses: (
+                  '&:hover .img' : (
+                    _atrule : (
+                      '@media (hover: hover) and (pointer: fine)' : (
+                        transform: var(--image-zoom-medium)
+                      )
+                    ),
+                  ),
+                )
+              )
+            ),
+            _responsive: (
+              md : (
+                grid-template-columns: 300px 1fr,
+              ),
+              lg : (
+                grid-template-columns: 140px 1fr,
+              )
+            ),
+          ),
+          '&.short' : (
+            _subclasses: (
+              '.title' : (
+                font-size: 1rem,
+                font-weight: 400,
+                line-height: 1.375rem,
+              )
+            )
+          ),
+          '&:last-child' : (
+            _responsive : (
+              md : (
+                margin: 0,
+                border-bottom: none,
+              )
+            )
+          ),
+          '.image' : (
+            position: relative,
+            display: block,
+            box-shadow: string.unquote('rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.1) 0px 2px 4px -2px'),
+            border-radius: 0.5rem,
+            overflow: hidden,
+            margin: 0 0 15px 0,
+            _subclasses: (
+              '.img' : (
+                transition-property: transform,
+                transition-timing-function: cubic-bezier(.4, 0, .2, 1),
+                transition-duration: .5s,
+                transform: scale(1),
+              ),
+              '&:hover:after' : (
+                background-image: string.unquote('linear-gradient(oklch(0.28 0.05 160.39 / 0.2), rgba(0, 0, 0, 0.46))'),
+              ),
+              '&:after' : (
+                content: '',
+                position: absolute,
+                inset: 0,
+                display: block,
+                z-index: 2,
+              ),
+            ),
+          ),
+          '.title': (
+            font-size: 1.25rem,
+            display: block,
+            font-weight: 400,
+            line-height: 1.55rem,
+            _subclasses : (
+              '&:hover' : (
+                text-decoration: underline,
+                text-underline-offset: 3px,
+                text-decoration-thickness: 1px,
+              ),
+            )
+          ),
+          '.description': (
+            display: block,
+            margin: 0 0 15px 0,
+          ),
+          '.date' : (
+            font-size: 0.825rem,
+            color: #959595,
+          )
+        )
+      )
+    ),
+    _responsive: (
+      lg: (
+        order: 2,
+        grid-column: auto,
+      ),
+    ),
+  );
+
+  $hot-news-section-grid-column-3: (
+    order: 3,
+    grid-column: span 3 / span 3,
+    /***/
+    _subclasses: (
+      '.post' : (
+        display: block,
+        width: 100%,
+        /*grid-template-columns: 1fr,*/
+        /*grid-auto-rows: auto,*/
+        /*grid-gap: 0,*/
+        margin: 0 0 15px 0,
+        padding: 0 0 15px 0,
+        border-bottom: 1px solid rgba(255, 255, 255, 0.15),
+        _subclasses: (
+          /***/
+          '&.big' : (
+            _subclasses: (
+              '.image' : (
+                _subclasses: (
+                  '&:hover .img' : (
+                    _atrule : (
+                      '@media (hover: hover) and (pointer: fine)' : (
+                        transform: var(--image-zoom-large)
+                      )
+                    ),
+                  ),
+                ),
+              ),
+              '.image > picture' : (
+                min-height: 160px,
+                display: block,
+              )
+            )
+          ),
+          '&.medium' : (
+            display: grid,
+            grid-template-columns: 140px 1fr,
+            gap: 1rem,
+            _subclasses: (
+              '.title' : (
+                font-size: 1rem,
+                font-weight: 400,
+                line-height: 1.375rem,
+              ),
+              '.image' : (
+                margin: 0 auto,
+                _subclasses: (
+                  '&:hover .img' : (
+                    _atrule : (
+                      '@media (hover: hover) and (pointer: fine)' : (
+                        transform: var(--image-zoom-medium)
+                      )
+                    ),
+                  ),
+                )
+              )
+            ),
+            _responsive: (
+              md : (
+                grid-template-columns: 300px 1fr,
+              ),
+              lg : (
+                grid-template-columns: 140px 1fr,
+              )
+            ),
+          ),
+          '&.short' : (
+            _subclasses: (
+              '.title' : (
+                font-size: 1rem,
+                font-weight: 400,
+                line-height: 1.375rem,
+              )
+            )
+          ),
+          '&:last-child' : (
+            _responsive : (
+              md : (
+                margin: 0,
+                border-bottom: none,
+              )
+            )
+          ),
+          '.image' : (
+            position: relative,
+            display: block,
+            box-shadow: string.unquote('rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.1) 0px 2px 4px -2px'),
+            border-radius: 0.5rem,
+            overflow: hidden,
+            margin: 0 auto 10px auto,
+            _subclasses: (
+              '.img' : (
+                transition-property: transform,
+                transition-timing-function: cubic-bezier(.4, 0, .2, 1),
+                transition-duration: .5s,
+                transform: scale(1),
+              ),
+              '&:hover:after' : (
+                background-image: string.unquote('linear-gradient(oklch(0.28 0.05 160.39 / 0.2), rgba(0, 0, 0, 0.46))'),
+              ),
+              '&:after' : (
+                content: '',
+                position: absolute,
+                inset: 0,
+                display: block,
+                z-index: 2,
+              ),
+            ),
+          ),
+          '.title': (
+            font-size: 1.25rem,
+            display: block,
+            font-weight: 400,
+            line-height: 1.55rem,
+            _subclasses : (
+              '&:hover' : (
+                text-decoration: underline,
+                text-underline-offset: 3px,
+                text-decoration-thickness: 1px,
+              ),
+            )
+          ),
+          '.description': (
+            display: block,
+            margin: 0 0 15px 0,
+          ),
+          '.date' : (
+            font-size: 0.825rem,
+            color: #959595,
+          )
+        )
+      )
+    ),
+    _responsive: (
+      lg: (
+        grid-column: auto,
+      ),
+    ),
+  );
+
+  $hot-section: (
+    --image-zoom-medium : scale(1.15),
+    --image-zoom-large : scale(1.0925),
+    --image-zoom-featured : scale(1.0625),
+    margin: 25px 0,
+    _subclasses: (
+      /***/
+      '> div > .grid': (
+        /***/
+        display: grid,
+        width: 100%,
+        grid-template-columns: 1fr,
+        grid-auto-rows: auto,
+        grid-template-rows: 1fr,
+        grid-gap: 0,
+        /***/
+        _responsive: (
+          md : (
+            grid-gap: 1.25rem,
+            grid-template-columns: 1fr 1fr,
+            grid-template-rows: 1fr,
+          ),
+          lg : (
+            grid-template-columns: minmax(260px, 320px) minmax(420px, 1fr) minmax(260px, 320px)
+          ),
+        ),
+        /***/
+        _subclasses: (
+          /***/
+          '.one' : $hot-news-section-grid-column-1,
+          '.two' : $hot-news-section-grid-column-2,
+          '.three' : $hot-news-section-grid-column-3,
+        ),
+      ),
+    )
+  );
+
+  @include mixins.generate-component(
+    $hot-section,
+    'hot',
+    app.$config,
+    app.$theme
+  );
+
+</style>

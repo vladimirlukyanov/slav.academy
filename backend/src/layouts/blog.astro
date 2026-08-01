@@ -1,0 +1,56 @@
+---
+import Head from "~/components/head/index.astro";
+import {SITE_TITLE, SITE_DESCRIPTION, SITE_KEYWORDS } from "~/consts";
+
+// Components
+import Header from "~/components/header/index.astro";
+import Footer from "~/components/footer/index.astro";
+
+const {title, description, published_date, updated_date, featured_image} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+    <Head
+            title={title + ' | ' + SITE_TITLE}
+            description={description}
+            image={featured_image}
+            published_date={published_date}
+            updated_date={updated_date}
+    >
+        <meta name="robots" content="index, follow, max-snippet:-1, max-video-preview:-1" />
+    </Head>
+</head>
+<body class="preload">
+<Header/>
+<div class="main">
+    <slot/>
+</div>
+<Footer/>
+</body>
+</html>
+
+<style lang="scss">
+  @use "sass:list";
+  @use "sass:string";
+  @use "sass:meta";
+  @use "sass:map";
+
+  @use "../styles/app.scss" as app;
+
+  @use "@nulllogic/scssleon/scss/mixins.scss" as mixins;
+  @use "@nulllogic/scssleon/scss/functions.scss" as functions;
+
+  $main-section: (
+    margin: 0 0 15px 0,
+    padding-inline: var(--padding-inline),
+  );
+
+  @include mixins.generate-component(
+      $main-section,
+      "main",
+      app.$config,
+      app.$theme
+  );
+</style>

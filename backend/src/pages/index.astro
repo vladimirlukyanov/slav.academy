@@ -1,0 +1,72 @@
+---
+import path from 'node:path';
+import {Image, Picture} from "astro:assets";
+
+import {getCollection} from "astro:content";
+
+import FormattedDate from "../components/FormattedDate.astro";
+
+import LayoutIndex from "../layouts/index.astro";
+import HotNews from "../components/homepage/hot_news/index.astro";
+
+const posts = (await getCollection('blog')).sort(
+    (a, b) => b.data.published_date.valueOf() - a.data.published_date.valueOf(),
+);
+
+const arts = posts.filter((post) => {
+    return post.data.category === 'images';
+});
+
+const quotes = posts.filter((post) => {
+    return post.data.category === "quote";
+});
+---
+
+<LayoutIndex>
+    <HotNews posts={posts}/>
+</LayoutIndex>
+
+<style lang="scss">
+  @use "sass:list";
+  @use "sass:string";
+  @use "sass:meta";
+  @use "sass:map";
+
+  @use "~/styles/app.scss" as app;
+
+  @use "~/styles/scss/mixins.scss" as mixins;
+  @use "~/styles/scss/functions.scss" as functions;
+
+  // --- art section --- //
+
+  $art-section: (
+    margin: 25px 0,
+    _subclasses: (
+      ".grid": (
+        display: grid,
+        width: 100%,
+        grid-template-columns: 1fr 1fr,
+        grid-auto-rows: auto,
+        grid-gap: 1rem,
+        _responsive: (
+          md: (
+            grid-template-columns: 1fr 1fr 1fr 1fr,
+            grid-gap: 1rem,
+          ),
+        ),
+        _subclasses: (
+          ".link": (
+            display: block,
+          ),
+        ),
+      ),
+    ),
+  );
+
+  @include mixins.generate-component(
+    $art-section,
+    "art",
+    app.$config,
+    app.$theme
+  );
+</style>
