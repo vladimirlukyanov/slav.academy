@@ -18,17 +18,17 @@ cloud:
 
 build:
 	@echo "[Building Docker image]"
-	docker build -t slav . -f ${CURRENT_DIR}/.config/docker/watch.Dockerfile
+	docker build -t nulllogic . -f ${CURRENT_DIR}/.config/docker/watch.Dockerfile
 
 watch:
-	@echo "[✨ \033[0;32mRunning\033[0m Docker 🐳 slav]"
-	docker run --rm -it -v ${CURRENT_DIR}/backend:/app slav npm i -f
+	@echo "[✨ \033[0;32mRunning\033[0m Docker 🐳 nulllogic]"
+	docker run --rm -it -v ${CURRENT_DIR}/backend:/app nulllogic npm i -f
 	docker run --rm -it \
 			-e ASTRO_TELEMETRY_DISABLED=1 \
 			-e INDEXNOW_KEY=$(INDEXNOW_KEY) \
     		-v ${CURRENT_DIR}/backend:/app \
     		-v ${SCSSLEON_DIR}/scss:/app/src/styles/scss \
-    		-p 4321:4321 slav npm run dev
+    		-p 4321:4321 nulllogic npm run dev
 
 html :
 	docker run --rm -it \
@@ -36,7 +36,7 @@ html :
     		-v ${CURRENT_DIR}/backend:/app \
     		-v ${CURRENT_DIR}/frontend:/app/dist \
     		-v ${SCSSLEON_DIR}/scss:/app/src/styles/scss \
-    		slav npm run build
+    		nulllogic npm run build
 
 sync :
 	docker run --rm -it \
@@ -45,12 +45,12 @@ sync :
     		-v ${CURRENT_DIR}/backend:/app \
     		-v ${CURRENT_DIR}/frontend:/app/dist \
     		-v ${SCSSLEON_DIR}/scss:/app/src/styles/scss \
-    		slav npm run build
-	docker run --rm -it -v ~/.aws:/root/.aws public.ecr.aws/aws-cli/aws-cli:latest s3 rm s3://slav.net --recursive
+    		nulllogic npm run build
+	docker run --rm -it -v ~/.aws:/root/.aws public.ecr.aws/aws-cli/aws-cli:latest s3 rm s3://nulllogic.net --recursive
 	docker run --rm -it -v ~/.aws:/root/.aws -v ${CURRENT_DIR}/frontend:/dist public.ecr.aws/aws-cli/aws-cli:latest \
-			s3 cp /dist s3://slav.net --recursive --exclude "_astro/*"
+			s3 cp /dist s3://nulllogic.net --recursive --exclude "_astro/*"
 	docker run --rm -it -v ~/.aws:/root/.aws -v ${CURRENT_DIR}/frontend:/dist public.ecr.aws/aws-cli/aws-cli:latest \
-			s3 cp /dist/_astro s3://slav.net/_astro --recursive --cache-control "max-age=${CACHE_CONTROL}"
+			s3 cp /dist/_astro s3://nulllogic.net/_astro --recursive --cache-control "max-age=${CACHE_CONTROL}"
 	docker run --rm -it -v ~/.aws:/root/.aws public.ecr.aws/aws-cli/aws-cli:latest cloudfront \
 			create-invalidation --distribution-id ${CLOUDFRONT_ID} --paths '/*'
 
